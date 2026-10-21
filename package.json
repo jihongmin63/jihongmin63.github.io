@@ -15,5 +15,8 @@
   },
   "dependencies": {
     "astro": "^6.0.0"
+  },
+  "devDependencies": {
+    "js-yaml": "^5.5.0"
   }
 }
