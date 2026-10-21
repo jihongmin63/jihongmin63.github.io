@@ -2,21 +2,12 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BusinessCard from '../../components/BusinessCard.astro';
 import { copy } from '../../lib/copy.mjs';
-import { languages, localizedPath, sections } from '../../lib/site.mjs';
+import { languages } from '../../lib/site.mjs';
 
 export function getStaticPaths() { return languages.map((lang) => ({ params: { lang } })); }
 const lang = Astro.params.lang;
 const c = copy[lang];
-const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout lang={lang} description={c.cardIntro1}>
-  <div class="home-intro"><span class="eyebrow">A personal website</span><span class="home-date">KAIST · Daejeon</span></div>
   <BusinessCard lang={lang} />
-  <section class="home-sections" aria-label={lang === 'ko' ? '분야 둘러보기' : 'Explore sections'}>
-    {sections.map((section, index) => <a href={localizedPath(lang, section, base)}>
-      <span class="home-section-number">0{index + 1}</span>
-      <span class="home-section-title">{c[section]}</span>
-      <span class="home-section-arrow" aria-hidden="true">↗</span>
-    </a>)}
-  </section>
 </BaseLayout>

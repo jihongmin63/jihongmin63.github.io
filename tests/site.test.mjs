@@ -37,13 +37,17 @@ test('static build produces the card and all three pages in both languages', asy
   assert.match(await page(''), /ko\//);
 });
 
-test('card offers a keyboard button, links, and a matching language switch', async () => {
-  const html = await page('ko');
-  assert.match(html, /data-flip-card/);
-  assert.match(html, /<button[^>]+data-flip-button/);
-  assert.match(html, /href="\/en\/"/);
-  assert.match(html, /href="\/ko\/research\/"/);
-  assert.match(html, /Jihong_Min_CV_2026_\.pdf/);
+test('home shows only the card and language switch outside its card content', async () => {
+  for (const [lang, other] of [['ko', 'en'], ['en', 'ko']]) {
+    const html = await page(lang);
+    assert.match(html, /data-flip-card/);
+    assert.match(html, /<button[^>]+data-flip-button/);
+    assert.match(html, new RegExp(`href="/${other}/"`));
+    assert.match(html, new RegExp(`href="/${lang}/research/"`));
+    assert.match(html, /Jihong_Min_CV_2026_\.pdf/);
+    assert.doesNotMatch(html, /class="(?:main-nav|wordmark|home-intro|home-sections|site-footer|card-labels)"/);
+  }
+  assert.doesNotMatch(await page('ko/research'), /class="main-nav"/);
 });
 
 test('cinema reflects the current movie snapshot', async () => {

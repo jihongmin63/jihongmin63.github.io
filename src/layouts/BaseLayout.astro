@@ -1,10 +1,11 @@
 ---
 import { copy } from '../lib/copy.mjs';
-import { localizedPath, sections, writingPagePath } from '../lib/site.mjs';
+import { localizedPath, writingPagePath } from '../lib/site.mjs';
 import '../styles/global.css';
 
 const { lang, title, section = '', page = 1, description = '' } = Astro.props;
 const c = copy[lang];
+const isHome = !section;
 const other = lang === 'ko' ? 'en' : 'ko';
 const base = import.meta.env.BASE_URL;
 const otherPath = section === 'writing' ? writingPagePath(other, page, base) : localizedPath(other, section, base);
@@ -21,23 +22,20 @@ const fullTitle = title ? `${title} · ${c.siteName}` : c.siteName;
     <title>{fullTitle}</title>
   </head>
   <body>
-    <div class="site-shell">
-      <header class="site-header">
-        <a class="wordmark" href={localizedPath(lang, '', base)} aria-label={c.home}>Jihong Min<span class="wordmark-dot">.</span></a>
-        <nav class="main-nav" aria-label={lang === 'ko' ? '주요 메뉴' : 'Main navigation'}>
-          {sections.map((item) => <a href={localizedPath(lang, item, base)} aria-current={section === item ? 'page' : undefined}>{c[item]}</a>)}
-        </nav>
+    <div class={isHome ? 'site-shell home-shell' : 'site-shell'}>
+      <header class={isHome ? 'site-header site-header-home' : 'site-header'}>
+        {!isHome && <a class="wordmark" href={localizedPath(lang, '', base)} aria-label={c.home}>Jihong Min<span class="wordmark-dot">.</span></a>}
         <nav class="language-nav" aria-label={lang === 'ko' ? '언어 선택' : 'Language'}>
           <a href={lang === 'ko' ? currentPath : otherPath} aria-current={lang === 'ko' ? 'page' : undefined} lang="ko">한국어</a>
           <span aria-hidden="true">/</span>
           <a href={lang === 'en' ? currentPath : otherPath} aria-current={lang === 'en' ? 'page' : undefined} lang="en">English</a>
         </nav>
       </header>
-      <main id="main-content"><slot /></main>
-      <footer class="site-footer">
+      <main id="main-content" class={isHome ? 'home-main' : undefined}><slot /></main>
+      {!isHome && <footer class="site-footer">
         <span>© {new Date().getFullYear()} Jihong Min</span>
         <a href={localizedPath(lang, '', base)}>{c.home}</a>
-      </footer>
+      </footer>}
     </div>
   </body>
 </html>
