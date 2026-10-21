@@ -59,12 +59,15 @@ test('cinema reflects the current movie snapshot', async () => {
   assert.equal((html.match(/class="spoiler-review"/g) || []).length, movies.filter((movie) => movie.review && movie.spoiler).length);
 });
 
-test('cinema lists Metronium and And the Tree as two separate films', async () => {
+test('cinema pairs the two Eunmak films with their official video links', async () => {
   for (const lang of ['ko', 'en']) {
     const html = await page(`${lang}/cinema`);
-    assert.equal((html.match(/class="created-film"/g) || []).length, 2);
-    assert.match(html, /메트로늄/);
-    assert.match(html, /그리고 나무/);
+    const cards = html.match(/<article class="created-film">[\s\S]*?<\/article>/g) || [];
+    assert.equal(cards.length, 2);
+    assert.match(cards[0], /메트로놈/);
+    assert.match(cards[0], /https:\/\/www\.youtube\.com\/watch\?v=wpWjzY6xfGA/);
+    assert.match(cards[1], /나무/);
+    assert.match(cards[1], /https:\/\/www\.youtube\.com\/watch\?v=CAeSAm9Yvjo/);
     assert.match(html, /은막/);
   }
 });

@@ -57,6 +57,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #0a
 .created-film{background:#fff;border:1px solid #d7dbdc;min-height:200px;padding:28px;display:flex;flex-direction:column;justify-content:space-between}
 .created-film h3{font-size:clamp(24px,3vw,36px);font-weight:500;letter-spacing:-.04em;margin:0}
 .created-film p{font-size:13px;color:#687175;margin:26px 0 0}
+.created-film a{align-self:flex-start;font-size:13px;margin-top:16px}
 .empty-panel{min-height:148px;padding:40px 24px;background:#f0f2f1;border:1px solid #d7dbdc;margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:22px;color:#667074}
 .empty-panel p{margin:0;line-height:1.5}
 .empty-panel a{white-space:nowrap;color:#252a2c}

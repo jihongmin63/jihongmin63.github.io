@@ -40,4 +40,4 @@ Actions의 **Sync Instagram and deploy**를 수동 실행해 첫 조회를 확�
 
 저장소 **Settings → Pages → Build and deployment**에서 Source를 **GitHub Actions**로 선택한다. `main`에 푸시하면 **Deploy site**가 테스트·빌드 후 `dist/`를 게시한다. Instagram 예약 작업은 스냅샷이 바뀐 경우 그것만 커밋하고 같은 실행에서 사이트를 빌드·배포한다. GitHub Actions의 기본 토큰으로 만든 커밋은 다른 push 워크플로를 자동 시작하지 않으므로 동기화 워크플로에 배포 단계가 포함되어 있다.
 
-직접 만든 영화의 영상 링크와 별도 연구 코드 링크는 아직 제공되지 않아 임의의 항목으로 채우지 않았다. 작품은 `src/pages/[lang]/cinema.astro`, 연구 소개는 `src/lib/copy.mjs`에서 관리한다. 읽기 기록과 소유자 추가 화면은 후속 범위다.
+직접 만든 영화와 영상 링크는 `src/pages/[lang]/cinema.astro`, 연구 소개는 `src/lib/copy.mjs`에서 관리한다. 별도 연구 코드 링크는 아직 제공되지 않아 임의의 항목으로 채우지 않았다. 읽기 기록과 소유자 추가 화면은 후속 범위다.
