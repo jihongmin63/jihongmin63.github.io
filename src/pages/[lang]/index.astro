@@ -1,29 +1,13 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import BusinessCard from '../../components/BusinessCard.astro';
 import { copy } from '../../lib/copy.mjs';
-import { languages, localizedPath } from '../../lib/site.mjs';
+import { languages } from '../../lib/site.mjs';
 
 export function getStaticPaths() { return languages.map((lang) => ({ params: { lang } })); }
 const lang = Astro.params.lang;
 const c = copy[lang];
-const base = import.meta.env.BASE_URL;
 ---
 <BaseLayout lang={lang} description={c.homeIntro}>
-  <div class="home-content">
-    <section class="home-intro">
-      <h1>Jihong Min<span aria-hidden="true">.</span></h1>
-      <p>{c.homeIntro}</p>
-    </section>
-    <nav class="home-links" aria-label={lang === 'ko' ? '페이지' : 'Pages'}>
-      <a href={localizedPath(lang, 'research', base)}><span>{c.research}</span><span aria-hidden="true">↗</span></a>
-      <a href={localizedPath(lang, 'cinema', base)}><span>{c.cinema}</span><span aria-hidden="true">↗</span></a>
-      <a href={localizedPath(lang, 'writing', base)}><span>{c.writing}</span><span aria-hidden="true">↗</span></a>
-    </nav>
-  </div>
-  <nav class="home-contact" aria-label={lang === 'ko' ? '연락처와 프로필' : 'Contact and profiles'}>
-    <a href="mailto:jihongmin.min@gmail.com">Email</a>
-    <a href="https://github.com/jihongmin63">GitHub</a>
-    <a href="https://www.instagram.com/themenostalgia/">Instagram</a>
-    <a href={`${base}Jihong_Min_CV_2026_.pdf`}>CV</a>
-  </nav>
+  <BusinessCard lang={lang} />
 </BaseLayout>

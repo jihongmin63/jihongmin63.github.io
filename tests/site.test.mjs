@@ -37,15 +37,17 @@ test('static build produces the home and all three pages in both languages', asy
   assert.match(await page(''), /ko\//);
 });
 
-test('home exposes the three sections and language switch without an extra interaction', async () => {
+test('home keeps the flippable card and its section links in both languages', async () => {
   for (const [lang, other] of [['ko', 'en'], ['en', 'ko']]) {
     const html = await page(lang);
+    assert.match(html, /data-flip-card/);
+    assert.match(html, /<button[^>]+data-flip-button/);
     assert.match(html, new RegExp(`href="/${other}/"`));
     for (const section of ['research', 'cinema', 'writing']) {
       assert.match(html, new RegExp(`href="/${lang}/${section}/"`));
     }
     assert.match(html, /Jihong_Min_CV_2026_\.pdf/);
-    assert.doesNotMatch(html, /data-flip-card|data-flip-button/);
+    assert.match(html, /class="card-face card-back"[^>]+aria-hidden="true"[^>]+inert/);
   }
 });
 
