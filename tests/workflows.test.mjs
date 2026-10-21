@@ -36,4 +36,8 @@ test('daily sync uses secrets and deploys the snapshot from the same run', async
   assert.ok(steps.some((step) => step.run?.includes('npm run build')));
   assert.ok(steps.some((step) => step.uses?.startsWith('actions/upload-pages-artifact@') && step.with?.path === 'dist'));
   assert.ok(steps.some((step) => step.uses?.startsWith('actions/deploy-pages@')));
+  const indexOf = (text) => steps.findIndex((step) => step.run?.includes(text));
+  assert.ok(indexOf('npm run sync:instagram') < indexOf('npm test'));
+  assert.ok(indexOf('npm test') < indexOf('npm run build'));
+  assert.ok(indexOf('npm run build') < indexOf('git add src/data/instagram.json'));
 });

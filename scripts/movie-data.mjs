@@ -63,9 +63,11 @@ export function parseMovieCsv(text) {
   for (const name of required) {
     if (!headers.includes(name)) throw new Error(`Missing required column: ${name}`);
   }
+  const minimumCells = Math.max(...required.map((name) => headers.indexOf(name))) + 1;
   const seen = new Set();
   const movies = [];
   for (const [index, cells] of rows.slice(1).entries()) {
+    if (cells.length < minimumCells) throw new Error(`Missing cells on row ${index + 2}`);
     const source = Object.fromEntries(headers.map((name, column) => [name, cells[column] ?? '']));
     if (source.Type !== 'MOVIE') continue;
     const rowNumber = index + 2;

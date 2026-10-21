@@ -29,6 +29,11 @@ test('rejects missing columns and invalid rating or URL', () => {
   assert.throws(() => parseMovieCsv(`${header}\n${row('a', '', '', 'MOVIE', '4').replace('https://pedia.watcha.com/ko-KR/contents/a', 'javascript:alert(1)')}`), /URL/i);
 });
 
+test('rejects a truncated row instead of losing its Spoiler value', () => {
+  const truncated = row('a', '2025-06-01', 'ending reveal', 'MOVIE', '4', 'true').replace(/,"true"$/, '');
+  assert.throws(() => parseMovieCsv(`${header}\n${truncated}`), /missing.*cell/i);
+});
+
 test('invalid source leaves previous snapshot untouched', async () => {
   const dir = await mkdtemp(join(tmpdir(), 'movies-'));
   const input = join(dir, 'input.csv');
