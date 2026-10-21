@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { copy } from '../../lib/copy.mjs';
+import { languages, localizedPath } from '../../lib/site.mjs';
+
+export function getStaticPaths() { return languages.map((lang) => ({ params: { lang } })); }
+const lang = Astro.params.lang;
+const c = copy[lang];
+const base = import.meta.env.BASE_URL;
+const projects = [
+  { number: '01', title: c.researchOne, description: c.researchOneDescription, status: c.current },
+  { number: '02', title: c.researchTwo, description: c.researchTwoDescription, status: c.current },
+  { number: '03', title: c.researchThree, description: c.researchThreeDescription, status: c.previous },
+];
+---
+<BaseLayout lang={lang} title={c.research} section="research" description={c.researchIntro}>
+  <a class="back-link" href={localizedPath(lang, '', base)}>← {c.back}</a>
+  <section class="page-intro">
+    <div class="page-index"><span>01 / 03</span><span>Research</span></div>
+    <h1>{c.research}</h1>
+    <p>{c.researchIntro}</p>
+  </section>
+  <div class="research-list">
+    {projects.map((project) => <article class="research-item">
+      <span class="item-number">{project.number}</span>
+      <div><p class="item-status">{project.status}</p><h2>{project.title}</h2><p>{project.description}</p></div>
+    </article>)}
+  </div>
+  <p class="research-cv"><a href={`${base}Jihong_Min_CV_2026_.pdf`}>Curriculum Vitæ (PDF) ↗</a></p>
+</BaseLayout>

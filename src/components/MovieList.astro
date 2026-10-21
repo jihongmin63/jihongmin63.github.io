@@ -1,0 +1,40 @@
+---
+import { copy } from '../lib/copy.mjs';
+
+const { lang, movies } = Astro.props;
+const c = copy[lang];
+const initialCount = 40;
+---
+<div class="movie-list-wrap" data-movie-list>
+  <ol class="movie-list">
+    {movies.map((movie, index) => <li class="movie-row" data-movie-row>
+      <span class="movie-number">{String(index + 1).padStart(3, '0')}</span>
+      <div class="movie-main">
+        <a class="movie-title" href={movie.url}>{movie.title}<span aria-hidden="true"> ↗</span></a>
+        <div class="movie-meta"><span>{movie.year}</span><span>{movie.watchedAt ? <time datetime={movie.watchedAt}>{movie.watchedAt}</time> : c.unknownDate}</span></div>
+        {movie.review && (movie.spoiler
+          ? <details class="spoiler-review"><summary>{c.spoiler}</summary><p>{movie.review}</p></details>
+          : <p class="movie-review">{movie.review}</p>)}
+      </div>
+      <span class="movie-rating" aria-label={`${movie.rating} / 5`}>{movie.rating.toFixed(1)} <span>/ 5</span></span>
+    </li>)}
+  </ol>
+  {movies.length > initialCount && <button class="more-button" data-more-movies type="button" hidden>{c.showMore} <span aria-hidden="true">↓</span></button>}
+</div>
+<script>
+  const list = document.querySelector('[data-movie-list]');
+  if (list) {
+    const rows = [...list.querySelectorAll('[data-movie-row]')];
+    const button = list.querySelector('[data-more-movies]');
+    if (button && rows.length > 40) {
+      let visible = 40;
+      rows.slice(visible).forEach((row) => { row.hidden = true; });
+      button.hidden = false;
+      button.addEventListener('click', () => {
+        rows.slice(visible, visible + 40).forEach((row) => { row.hidden = false; });
+        visible += 40;
+        if (visible >= rows.length) button.hidden = true;
+      });
+    }
+  }
+</script>

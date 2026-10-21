@@ -1,0 +1,19 @@
+{
+  "name": "jihongmin63-personal-site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "node --test",
+    "import:movies": "node scripts/import-movies.mjs movie.csv",
+    "sync:instagram": "node scripts/sync-instagram.mjs"
+  },
+  "dependencies": {
+    "astro": "^6.0.0"
+  }
+}

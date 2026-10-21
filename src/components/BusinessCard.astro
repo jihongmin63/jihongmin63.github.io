@@ -1,0 +1,68 @@
+---
+import { copy } from '../lib/copy.mjs';
+import { localizedPath } from '../lib/site.mjs';
+
+const { lang } = Astro.props;
+const c = copy[lang];
+const base = import.meta.env.BASE_URL;
+---
+<div class="card-block">
+  <div class="card-labels"><span>{c.cardFront} / {c.cardBack}</span><span>01 — 03</span></div>
+  <div class="card-scene" data-flip-card>
+    <div class="card-surface">
+      <section class="card-face card-front" aria-label={c.cardFront}>
+        <div>
+          <p class="eyebrow">Personal card · 2026</p>
+          <h1>Jihong Min</h1>
+          <div class="card-identity">
+            <p>{c.frontLine1}</p>
+            <p>{c.frontLine2}</p>
+          </div>
+        </div>
+        <div class="card-links">
+          <a href="mailto:jihongmin.min@gmail.com">Email ↗</a>
+          <a href="https://github.com/jihongmin63">GitHub ↗</a>
+          <a href="https://www.instagram.com/themenostalgia/">Instagram ↗</a>
+        </div>
+      </section>
+      <section class="card-face card-back" aria-label={c.cardBack} aria-hidden="true" inert>
+        <div>
+          <p class="eyebrow">Jihong Min · About</p>
+          <p class="card-statement">{c.cardIntro1}</p>
+          <p class="card-statement">{c.cardIntro2}</p>
+          <p class="card-statement">{c.cardIntro3}</p>
+          <p class="card-paths">
+            <a href={localizedPath(lang, 'research', base)}>{c.research} ↗</a>
+            <a href={localizedPath(lang, 'cinema', base)}>{c.cinema} ↗</a>
+            <a href={localizedPath(lang, 'writing', base)}>{c.writing} ↗</a>
+          </p>
+        </div>
+        <a class="card-cv" href={`${base}Jihong_Min_CV_2026_.pdf`}>CV ↗</a>
+      </section>
+    </div>
+  </div>
+  <div class="card-controls">
+    <span>{c.cardHint}</span>
+    <button type="button" data-flip-button aria-pressed="false" aria-label={c.flip}>{c.flip}<span aria-hidden="true"> ↻</span></button>
+  </div>
+</div>
+<script>
+  const card = document.querySelector('[data-flip-card]');
+  const button = document.querySelector('[data-flip-button]');
+  if (card && button) {
+    const front = card.querySelector('.card-front');
+    const back = card.querySelector('.card-back');
+    const flip = () => {
+      const flipped = card.classList.toggle('is-flipped');
+      button.setAttribute('aria-pressed', String(flipped));
+      front.setAttribute('aria-hidden', String(flipped));
+      back.setAttribute('aria-hidden', String(!flipped));
+      front.inert = flipped;
+      back.inert = !flipped;
+    };
+    button.addEventListener('click', flip);
+    card.addEventListener('click', (event) => {
+      if (!event.target.closest('a, button')) flip();
+    });
+  }
+</script>
