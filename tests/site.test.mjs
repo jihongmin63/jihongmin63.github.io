@@ -26,7 +26,7 @@ test('localized paths retain the configured deployment base', async () => {
   assert.equal(localizedPath('ko', '', '/portfolio/'), '/portfolio/ko/');
 });
 
-test('static build produces the card and all three pages in both languages', async () => {
+test('static build produces the home and all three pages in both languages', async () => {
   buildSite();
   for (const lang of ['ko', 'en']) {
     for (const section of ['', 'research', 'cinema', 'writing']) {
@@ -37,23 +37,22 @@ test('static build produces the card and all three pages in both languages', asy
   assert.match(await page(''), /ko\//);
 });
 
-test('home shows only the card and language switch outside its card content', async () => {
+test('home exposes the three sections and language switch without an extra interaction', async () => {
   for (const [lang, other] of [['ko', 'en'], ['en', 'ko']]) {
     const html = await page(lang);
-    assert.match(html, /data-flip-card/);
-    assert.match(html, /<button[^>]+data-flip-button/);
     assert.match(html, new RegExp(`href="/${other}/"`));
-    assert.match(html, new RegExp(`href="/${lang}/research/"`));
+    for (const section of ['research', 'cinema', 'writing']) {
+      assert.match(html, new RegExp(`href="/${lang}/${section}/"`));
+    }
     assert.match(html, /Jihong_Min_CV_2026_\.pdf/);
-    assert.doesNotMatch(html, /class="(?:main-nav|wordmark|home-intro|home-sections|site-footer|card-labels)"/);
+    assert.doesNotMatch(html, /data-flip-card|data-flip-button/);
   }
-  assert.doesNotMatch(await page('ko/research'), /class="main-nav"/);
 });
 
 test('cinema reflects the current movie snapshot', async () => {
   const html = await page('ko/cinema');
   const movies = JSON.parse(await readFile(moviesPath, 'utf8'));
-  assert.ok(html.includes(`${movies.length} 편`));
+  assert.match(html, /영화 감상 기록/);
   if (movies.length) assert.ok(html.includes(movies[0].url));
   assert.equal((html.match(/class="movie-review"/g) || []).length, movies.filter((movie) => movie.review && !movie.spoiler).length);
   assert.equal((html.match(/class="spoiler-review"/g) || []).length, movies.filter((movie) => movie.review && movie.spoiler).length);
@@ -77,11 +76,9 @@ test('writing page reflects the current Instagram snapshot', async () => {
   const posts = JSON.parse(await readFile(postsPath, 'utf8'));
   assert.match(html, /https:\/\/www\.instagram\.com\/themenostalgia\//);
   if (posts.length) {
-    assert.doesNotMatch(html, /게시물 연결 전/);
     assert.ok(html.includes(posts[0].permalink));
     assert.equal((html.match(/class="post-card"/g) || []).length, Math.min(12, posts.length));
   } else {
-    assert.match(html, /게시물 연결 전/);
     assert.equal((html.match(/class="post-card"/g) || []).length, 0);
   }
 });
@@ -93,8 +90,8 @@ test('empty and populated content snapshots render without changing the checked-
     await writeFile(moviesPath, '[]\n');
     await writeFile(postsPath, '[]\n');
     buildSite();
-    assert.match(await page('ko/writing'), /게시물 연결 전/);
-    assert.match(await page('ko/cinema'), /0 편/);
+    assert.match(await page('ko/writing'), /Instagram/);
+    assert.match(await page('ko/cinema'), /영화/);
 
     await writeFile(moviesPath, JSON.stringify([{ id: 'fixture', url: 'https://pedia.watcha.com/ko-KR/contents/fixture', title: 'Fixture film', year: 2026, rating: 4, review: 'A <turn> & more', spoiler: true, watchedAt: null }]));
     await writeFile(postsPath, JSON.stringify([{ id: 'fixture', caption: 'Fixture post', mediaType: 'IMAGE', timestamp: '2026-10-21T00:00:00+0000', permalink: 'https://www.instagram.com/p/fixture/', previewUrl: null }]));
@@ -104,7 +101,7 @@ test('empty and populated content snapshots render without changing the checked-
     assert.match(cinema, /A &lt;turn&gt; &amp; more/);
     const writing = await page('ko/writing');
     assert.match(writing, /https:\/\/www\.instagram\.com\/p\/fixture\//);
-    assert.doesNotMatch(writing, /게시물 연결 전/);
+    assert.match(writing, /Fixture post/);
   } finally {
     await writeFile(moviesPath, originalMovies);
     await writeFile(postsPath, originalPosts);

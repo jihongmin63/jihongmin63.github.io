@@ -3,7 +3,7 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import WritingContent from '../../../components/WritingContent.astro';
 import allPosts from '../../../data/instagram.json';
 import { copy } from '../../../lib/copy.mjs';
-import { languages, localizedPath, paginate } from '../../../lib/site.mjs';
+import { languages, paginate } from '../../../lib/site.mjs';
 
 export function getStaticPaths() {
   const count = Math.ceil(allPosts.length / 12);
@@ -12,10 +12,8 @@ export function getStaticPaths() {
 const lang = Astro.params.lang;
 const page = Number(Astro.params.page);
 const c = copy[lang];
-const base = import.meta.env.BASE_URL;
 const { items, pageCount } = paginate(allPosts, page);
 ---
 <BaseLayout lang={lang} title={`${c.writing} · ${c.page} ${page}`} section="writing" page={page} description={c.writingIntro}>
-  <a class="back-link" href={localizedPath(lang, '', base)}>← {c.back}</a>
   <WritingContent lang={lang} posts={items} page={page} pageCount={pageCount} />
 </BaseLayout>

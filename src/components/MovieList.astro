@@ -7,11 +7,10 @@ const initialCount = 40;
 ---
 <div class="movie-list-wrap" data-movie-list>
   <ol class="movie-list">
-    {movies.map((movie, index) => <li class="movie-row" data-movie-row>
-      <span class="movie-number">{String(index + 1).padStart(3, '0')}</span>
+    {movies.map((movie) => <li class="movie-row" data-movie-row>
       <div class="movie-main">
         <a class="movie-title" href={movie.url}>{movie.title}<span aria-hidden="true"> ↗</span></a>
-        <div class="movie-meta"><span>{movie.year}</span><span>{movie.watchedAt ? <time datetime={movie.watchedAt}>{movie.watchedAt}</time> : c.unknownDate}</span></div>
+        <div class="movie-meta"><span>{movie.year}</span>{movie.watchedAt && <time datetime={movie.watchedAt}>{movie.watchedAt}</time>}</div>
         {movie.review && (movie.spoiler
           ? <details class="spoiler-review"><summary>{c.spoiler}</summary><p>{movie.review}</p></details>
           : <p class="movie-review">{movie.review}</p>)}

@@ -6,15 +6,11 @@ const { lang, posts, page, pageCount } = Astro.props;
 const c = copy[lang];
 const base = import.meta.env.BASE_URL;
 ---
-<section class="page-intro">
-  <div class="page-index"><span>03 / 03</span><span>Writing</span></div>
-  <h1>{c.writing}</h1>
-  <p>{c.writingIntro}</p>
-</section>
+<h1 class="page-title">{c.writing}</h1>
 {posts.length === 0
-  ? <div class="empty-panel"><p>{c.instagramPending}</p><a href="https://www.instagram.com/themenostalgia/">{c.openInstagram} ↗</a></div>
+  ? <p class="empty-note"><a href="https://www.instagram.com/themenostalgia/">Instagram ↗</a></p>
   : <>
-    <div class="section-heading"><h2>Instagram · @themenostalgia</h2><a href="https://www.instagram.com/themenostalgia/">{c.openInstagram} ↗</a></div>
+    <p class="writing-source"><a href="https://www.instagram.com/themenostalgia/">@themenostalgia ↗</a></p>
     <ol class="post-grid">
       {posts.map((post) => <li class="post-card">
         <a class="post-preview" href={post.permalink} aria-label={c.openPost}>

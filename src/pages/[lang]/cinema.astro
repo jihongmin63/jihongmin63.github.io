@@ -3,36 +3,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import MovieList from '../../components/MovieList.astro';
 import movies from '../../data/movies.json';
 import { copy } from '../../lib/copy.mjs';
-import { languages, localizedPath } from '../../lib/site.mjs';
+import { languages } from '../../lib/site.mjs';
 
 export function getStaticPaths() { return languages.map((lang) => ({ params: { lang } })); }
 const lang = Astro.params.lang;
 const c = copy[lang];
-const base = import.meta.env.BASE_URL;
 const createdFilms = [
   { title: '메트로놈', url: 'https://www.youtube.com/watch?v=wpWjzY6xfGA' },
   { title: '나무', url: 'https://www.youtube.com/watch?v=CAeSAm9Yvjo' },
 ];
 ---
 <BaseLayout lang={lang} title={c.cinema} section="cinema" description={c.cinemaIntro}>
-  <a class="back-link" href={localizedPath(lang, '', base)}>← {c.back}</a>
-  <section class="page-intro">
-    <div class="page-index"><span>02 / 03</span><span>Cinema</span></div>
-    <h1>{c.cinema}</h1>
-    <p>{c.cinemaIntro}</p>
-  </section>
+  <h1 class="page-title">{c.cinema}</h1>
   <section class="content-section">
-    <div class="section-heading"><h2>{c.myFilms}</h2><span>{createdFilms.length} {c.filmsCount}</span></div>
+    <div class="section-heading"><h2>{c.myFilms}</h2><span>{c.filmClub}</span></div>
     <div class="created-films">
       {createdFilms.map((film) => <article class="created-film">
-        <h3>{film.title}</h3>
-        <p>{c.filmClub}</p>
-        <a href={film.url}>{film.title} {c.watchFilm} ↗</a>
+        <a href={film.url} aria-label={`${film.title} · ${c.watchFilm}`}><span>{film.title}</span><span aria-hidden="true">↗</span></a>
       </article>)}
     </div>
   </section>
   <section class="content-section">
-    <div class="section-heading"><h2>{c.watchedFilms}</h2><span>{movies.length} {c.filmsCount}</span></div>
-    {movies.length ? <MovieList lang={lang} movies={movies} /> : <div class="empty-panel"><p>{c.filmsPending}</p></div>}
+    <div class="section-heading"><h2>{c.watchedFilms}</h2></div>
+    {movies.length ? <MovieList lang={lang} movies={movies} /> : <p class="empty-note">{c.filmsPending}</p>}
   </section>
 </BaseLayout>
