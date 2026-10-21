@@ -9,6 +9,7 @@ export function getStaticPaths() { return languages.map((lang) => ({ params: { l
 const lang = Astro.params.lang;
 const c = copy[lang];
 const base = import.meta.env.BASE_URL;
+const createdFilms = ['메트로늄', '그리고 나무'];
 ---
 <BaseLayout lang={lang} title={c.cinema} section="cinema" description={c.cinemaIntro}>
   <a class="back-link" href={localizedPath(lang, '', base)}>← {c.back}</a>
@@ -18,8 +19,13 @@ const base = import.meta.env.BASE_URL;
     <p>{c.cinemaIntro}</p>
   </section>
   <section class="content-section">
-    <div class="section-heading"><h2>{c.myFilms}</h2><span>01</span></div>
-    <div class="empty-panel"><p>{c.filmsPending}</p></div>
+    <div class="section-heading"><h2>{c.myFilms}</h2><span>{createdFilms.length} {c.filmsCount}</span></div>
+    <div class="created-films">
+      {createdFilms.map((title) => <article class="created-film">
+        <h3>{title}</h3>
+        <p>{c.filmClub}</p>
+      </article>)}
+    </div>
   </section>
   <section class="content-section">
     <div class="section-heading"><h2>{c.watchedFilms}</h2><span>{movies.length} {c.filmsCount}</span></div>

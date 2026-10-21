@@ -53,6 +53,10 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #0a
 .section-heading{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding-bottom:20px;border-bottom:1px solid #cbd1d3}
 .section-heading h2{font-size:clamp(22px,2.5vw,30px);font-weight:500;letter-spacing:-.04em;margin:0}
 .section-heading>a{font-size:13px}
+.created-films{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:20px}
+.created-film{background:#fff;border:1px solid #d7dbdc;min-height:200px;padding:28px;display:flex;flex-direction:column;justify-content:space-between}
+.created-film h3{font-size:clamp(24px,3vw,36px);font-weight:500;letter-spacing:-.04em;margin:0}
+.created-film p{font-size:13px;color:#687175;margin:26px 0 0}
 .empty-panel{min-height:148px;padding:40px 24px;background:#f0f2f1;border:1px solid #d7dbdc;margin-top:20px;display:flex;align-items:center;justify-content:space-between;gap:22px;color:#667074}
 .empty-panel p{margin:0;line-height:1.5}
 .empty-panel a{white-space:nowrap;color:#252a2c}
@@ -92,6 +96,8 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid #0a
  .movie-row{grid-template-columns:42px minmax(0,1fr) 74px;gap:8px}
  .movie-title,.movie-rating{font-size:16px}
  .movie-meta{gap:9px;flex-wrap:wrap}
+ .created-films{grid-template-columns:1fr;gap:12px}
+ .created-film{min-height:150px}
  .post-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  .empty-panel{align-items:flex-start;flex-direction:column}
 }

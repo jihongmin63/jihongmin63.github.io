@@ -59,6 +59,16 @@ test('cinema reflects the current movie snapshot', async () => {
   assert.equal((html.match(/class="spoiler-review"/g) || []).length, movies.filter((movie) => movie.review && movie.spoiler).length);
 });
 
+test('cinema lists Metronium and And the Tree as two separate films', async () => {
+  for (const lang of ['ko', 'en']) {
+    const html = await page(`${lang}/cinema`);
+    assert.equal((html.match(/class="created-film"/g) || []).length, 2);
+    assert.match(html, /메트로늄/);
+    assert.match(html, /그리고 나무/);
+    assert.match(html, /은막/);
+  }
+});
+
 test('writing page reflects the current Instagram snapshot', async () => {
   const html = await page('ko/writing');
   const posts = JSON.parse(await readFile(postsPath, 'utf8'));
